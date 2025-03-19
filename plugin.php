@@ -26,7 +26,7 @@ class Djebel_Simple_Newsletter_Plugin
 
     public function __construct()
     {
-        $file = Dj_CMS_Util::getDataDir() . '/plugins/djebel-simple-newsletter/{YYYY}/{MM}/data_{YYYY}-{MM}-{DD}.csv';
+        $file = Dj_App_Util::getDataDir() . '/plugins/djebel-simple-newsletter/{YYYY}/{MM}/data_{YYYY}-{MM}-{DD}.csv';
 
         $replace_str = [
             '{YYYY}' => date('Y'),
@@ -40,7 +40,7 @@ class Djebel_Simple_Newsletter_Plugin
         $shortcode_obj = Dj_App_Shortcode::getInstance();
         $shortcode_obj->addShortcode('djebel-simple-newsletter', [ $this, 'renderNewsletterForm', ] );
 
-//        Dj_CMS_Hooks::addAction( 'app.page.body.start', [ $obj, 'renderNewsletterForm', ] );
+//        Dj_App_Hooks::addAction( 'app.page.body.start', [ $obj, 'renderNewsletterForm', ] );
     }
 
     /**
@@ -51,16 +51,16 @@ class Djebel_Simple_Newsletter_Plugin
     public function renderNewsletterForm($params = [])
     {
         $msg = '';
-        $req_obj = Dj_CMS_Request::getInstance();
+        $req_obj = Dj_App_Request::getInstance();
         $email = $req_obj->get('simple_newsletter_email');
         $email_enc = $req_obj->encode($email);
 
         if ($req_obj->isPost('simple_newsletter_email')) {
             try {
                 if (empty($email)) {
-                    throw new Dj_CMS_Exception('Please enter your email');
+                    throw new Dj_App_Exception('Please enter your email');
                 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    throw new Dj_CMS_Exception('Invalid email');
+                    throw new Dj_App_Exception('Invalid email');
                 }
 
                 $data = [
@@ -69,7 +69,7 @@ class Djebel_Simple_Newsletter_Plugin
 
                 $ctx = [];
                 $ctx['data'] = $data;
-                Dj_CMS_Hooks::doAction( 'app.plugin.simple_newsletter.validate_data', $ctx );
+                Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.validate_data', $ctx );
 
                 $data = [];
                 $data['email'] = $email;
@@ -77,7 +77,7 @@ class Djebel_Simple_Newsletter_Plugin
                 $data['user_agent'] = $req_obj->getUserAgent();
                 $data['ip'] = empty($_SERVER['REMOTE_ADDR']) ? '' : $_SERVER['REMOTE_ADDR'];
 
-                $data = Dj_CMS_Hooks::applyFilter( 'app.plugin.simple_newsletter.data', $data );
+                $data = Dj_App_Hooks::applyFilter( 'app.plugin.simple_newsletter.data', $data );
 
                 // save this in csv using php csv
                 $file = $this->getFile();
@@ -85,26 +85,26 @@ class Djebel_Simple_Newsletter_Plugin
                 $res = $this->writeCsv($file, $data);
 
                 if ($res->isError()) {
-                    throw new Dj_CMS_Exception('Failed to subscribe. Please try again later');
+                    throw new Dj_App_Exception('Failed to subscribe. Please try again later');
                 }
 
                 $email_enc = ''; // no need to show it again
                 $msg = 'Done';
-                $msg = Dj_CMS_Util::msg($msg, Dj_CMS_Util::MSG_SUCCESS);
+                $msg = Dj_App_Util::msg($msg, Dj_App_Util::MSG_SUCCESS);
             } catch (Exception $e) {
                 $msg = $e->getMessage();
-                $msg = Dj_CMS_Util::msg($msg);
+                $msg = Dj_App_Util::msg($msg);
             }
         }
         ?>
         <div class="djebel-simple-newsletter-msg"><?php echo $msg; ?></div>
 
         <form id="djebel-simple-newsletter-form" class="djebel-simple-newsletter-form" method="post" action="">
-            <?php Dj_CMS_Hooks::doAction( 'app.plugin.simple_newsletter.form_start' ); ?>
+            <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_start' ); ?>
             <input type="email" id="email" name="simple_newsletter_email" value="<?php echo $email_enc; ?>"
                    placeholder="Enter your email" required="required" />
             <button type="submit" name="simple_newsletter_submit">Subscribe</button>
-            <?php Dj_CMS_Hooks::doAction( 'app.plugin.simple_newsletter.form_end' ); ?>
+            <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_end' ); ?>
         </form>
         <?php
     }
@@ -112,13 +112,13 @@ class Djebel_Simple_Newsletter_Plugin
     public function getFile(): string
     {
         $file = $this->file;
-        $file = Dj_CMS_Hooks::applyFilter( 'app.plugin.simple_newsletter.file', $file );
+        $file = Dj_App_Hooks::applyFilter( 'app.plugin.simple_newsletter.file', $file );
         return $file;
     }
 
     public function setFile(string $file): void
     {
-        $file = Dj_CMS_Hooks::applyFilter( 'app.plugin.simple_newsletter.set_file', $file );
+        $file = Dj_App_Hooks::applyFilter( 'app.plugin.simple_newsletter.set_file', $file );
         $this->file = $file;
     }
 
@@ -132,9 +132,9 @@ class Djebel_Simple_Newsletter_Plugin
         $fp = null;
 
         try {
-            Dj_CMS_Util::time( __METHOD__ );
+            Dj_App_Util::time( __METHOD__ );
             $dir = dirname($file);
-            Dj_CMS_File_Util::mkdir($dir);
+            Dj_App_File_Util::mkdir($dir);
 
             $fp = fopen($file, 'ab');
 
@@ -164,7 +164,7 @@ class Djebel_Simple_Newsletter_Plugin
                 fclose($fp);
             }
 
-            $res_obj->exec_time = Dj_CMS_Util::time( __METHOD__ );
+            $res_obj->exec_time = Dj_App_Util::time( __METHOD__ );
         }
 
         return $res_obj;
