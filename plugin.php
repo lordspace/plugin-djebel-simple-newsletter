@@ -159,7 +159,12 @@ class Djebel_Simple_Newsletter_Plugin
         try {
             Dj_App_Util::time( __METHOD__ );
             $dir = dirname($file);
-            Dj_App_File_Util::mkdir($dir);
+
+            $res = Dj_App_File_Util::mkdir($dir);
+
+            if (empty($res)) {
+                throw new Dj_App_Exception('Failed to create directory ' . $dir);
+            }
 
             $fp = fopen($file, 'ab');
 
