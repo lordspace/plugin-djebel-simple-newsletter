@@ -18,6 +18,14 @@ license: gpl2
 */
 
 
+/**
+ * Custom exception for honeypot detection - silently handled
+ */
+class Djebel_Simple_Newsletter_Honeypot_Exception extends Exception
+{
+    // This exception is intentionally silent - no message needed
+}
+
 $obj = new Djebel_Simple_Newsletter_Plugin();
 
 class Djebel_Simple_Newsletter_Plugin
@@ -66,6 +74,16 @@ class Djebel_Simple_Newsletter_Plugin
 
         if ($req_obj->isPost('simple_newsletter_email')) {
             try {
+                // Honeypot spam detection
+                $honeypot_website = $req_obj->get('djebel_simple_newsletter_website');
+                $honeypot_phone = $req_obj->get('djebel_simple_newsletter_phone');
+                
+                // If either honeypot field is filled, it's spam - throw ignorable exception
+                if (!empty($honeypot_website) || !empty($honeypot_phone)) {
+                    throw new Djebel_Simple_Newsletter_Honeypot_Exception();
+                }
+
+                // Normal validation for legitimate submissions
                 if (empty($email)) {
                     throw new Dj_App_Exception('Please enter your email');
                 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -105,16 +123,59 @@ class Djebel_Simple_Newsletter_Plugin
                 $email_enc = ''; // no need to show it again
                 $msg = 'Done';
                 $msg = Dj_App_Util::msg($msg, Dj_App_Util::MSG_SUCCESS);
+            } catch (Djebel_Simple_Newsletter_Honeypot_Exception $e) {
+                // Honeypot detected - return fake success without saving data
+                $email_enc = '';
+                $msg = 'Done';
+                $msg = Dj_App_Util::msg($msg, Dj_App_Util::MSG_SUCCESS);
             } catch (Exception $e) {
                 $msg = $e->getMessage();
                 $msg = Dj_App_Util::msg($msg);
             }
         }
         ?>
+        <style>
+        /* Newsletter Plugin Optional Field Styles */
+        .djebel-simple-newsletter-optional-field {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .djebel-simple-newsletter-optional-field input {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            border: none;
+            background: transparent;
+            color: transparent;
+        }
+        </style>
         <div class="djebel-simple-newsletter-msg"><?php echo $msg; ?></div>
 
         <form id="djebel-simple-newsletter-form" class="djebel-simple-newsletter-form" method="post" action="">
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_start' ); ?>
+            
+            <input type="hidden"
+                   name="djebel_simple_newsletter_website" 
+                   value="" 
+                   tabindex="-1" 
+                   autocomplete="off" />
+            
+            <div class="djebel-simple-newsletter-optional-field">
+                <input type="text" 
+                       name="djebel_simple_newsletter_phone" 
+                       value="" 
+                       tabindex="-1" 
+                       autocomplete="off" 
+                       placeholder="Phone number (optional)" />
+            </div>
             
             <div class="newsletter-input-group">
                 <input type="email" 
@@ -225,4 +286,5 @@ class Djebel_Simple_Newsletter_Plugin
 
         return $res_obj;
     }
+
 }

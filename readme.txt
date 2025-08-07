@@ -12,12 +12,14 @@ A lightweight and modern newsletter subscription plugin for Djebel applications.
 - ✅ **Hook System** - Extensible with Djebel hooks and filters
 - ✅ **Validation** - Email validation and error handling
 - ✅ **Modern UI** - Beautiful, accessible design
+- ✅ **Spam Protection** - Honeypot fields to prevent automated spam
 
 ## Installation
 
 1. Place the plugin folder in your `dj-app/dj-content/plugins/` directory
 2. The plugin will automatically load when Djebel starts
-3. No additional configuration required
+3. CSS styles are automatically included when the shortcode is used
+4. No additional configuration required
 
 ## Usage
 
@@ -184,6 +186,7 @@ The plugin includes comprehensive error handling:
 - **CSV injection protection** - Safe CSV writing with proper escaping
 - **File locking** - Prevents concurrent write conflicts
 - **Input sanitization** - All user inputs are properly sanitized
+- **Honeypot spam protection** - Hidden fields to detect and block automated spam bots
 
 ## Browser Compatibility
 
