@@ -95,7 +95,6 @@ class Djebel_Simple_Newsletter_Plugin
 
                 // save this in csv using php csv
                 $file = $this->getFile();
-
                 $res = $this->writeCsv($file, $data);
 
                 if ($res->isError()) {
@@ -176,6 +175,15 @@ class Djebel_Simple_Newsletter_Plugin
 
             if (!$fl_res) {
                 throw new Dj_App_File_Util_Exception("Couldn't lock file", ['file' => $file]);
+            }
+
+            $file_size = filesize($file);
+
+            // new file so it needs a header
+            if ($file_size < 100) {
+                $header_cols = array_keys($data); // this is a row
+                $header_cols = array_map('Dj_App_String_Util::formatStringId', $header_cols);
+                $csv_res = fputcsv($fp, $header_cols, ",", '"', '\\');
             }
 
             // use csv; keep php 8.x happy and without warnings.
