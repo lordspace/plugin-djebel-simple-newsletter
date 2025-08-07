@@ -55,7 +55,7 @@ class Djebel_Simple_Newsletter_Plugin
         $email_enc = $req_obj->encode($email);
 
         $render_agree = empty($params['agree']) ? 0 : 1;
-        $auto_focus = empty($params['focus']) ? 0 : 1;
+        $auto_focus = empty($params['auto_focus']) ? 0 : 1;
 
         $agree_text = '';
 
