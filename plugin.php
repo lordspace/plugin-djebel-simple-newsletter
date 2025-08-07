@@ -147,8 +147,8 @@ class Djebel_Simple_Newsletter_Plugin
                 throw new Dj_App_File_Util_Exception("Couldn't lock file", ['file' => $file]);
             }
 
-            // use csv
-            $csv_res = fputcsv($fp, $data);
+            // use csv; keep php 8.x happy and without warnings.
+            $csv_res = fputcsv($fp, $data, ",", '"', '\\');
 
             if (empty($csv_res)) {
                 throw new Dj_App_File_Util_Exception("Couldn't write to file", ['file' => $file]);
