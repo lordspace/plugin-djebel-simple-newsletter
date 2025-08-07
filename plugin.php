@@ -61,6 +61,7 @@ class Djebel_Simple_Newsletter_Plugin
 
         if ($render_agree) {
             $agree_text = empty($params['agree_text']) ? "I agree to be notified" : $params['agree_text'];
+            $agree_text = Djebel_App_HTML::encodeEntities($agree_text);
         }
 
         if ($req_obj->isPost('simple_newsletter_email')) {
