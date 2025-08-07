@@ -54,7 +54,14 @@ class Djebel_Simple_Newsletter_Plugin
         $email = $req_obj->get('simple_newsletter_email');
         $email_enc = $req_obj->encode($email);
 
+        $render_agree = empty($params['agree']) ? 0 : 1;
         $auto_focus = empty($params['focus']) ? 0 : 1;
+
+        $agree_text = '';
+
+        if ($render_agree) {
+            $agree_text = empty($params['agree_text']) ? "I agree to be notified" : $params['agree_text'];
+        }
 
         if ($req_obj->isPost('simple_newsletter_email')) {
             try {
@@ -62,6 +69,12 @@ class Djebel_Simple_Newsletter_Plugin
                     throw new Dj_App_Exception('Please enter your email');
                 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     throw new Dj_App_Exception('Invalid email');
+                }
+
+                $simple_newsletter_gdpr_accept = $req_obj->simple_newsletter_gdpr_accept;
+
+                if ($render_agree && empty($simple_newsletter_gdpr_accept)) {
+                    throw new Dj_App_Exception('Please agree to be notified');
                 }
 
                 $data = [
@@ -105,6 +118,16 @@ class Djebel_Simple_Newsletter_Plugin
             <input type="email" id="email" name="simple_newsletter_email" value="<?php echo $email_enc; ?>"
                    <?php echo $auto_focus ? 'autofocus="autofocus"' : ''; ?>
                    placeholder="Enter your email" required="required" />
+
+            <?php if ($render_agree) : ?>
+            <div>
+                <label>
+                    <input type="checkbox" name="simple_newsletter_gdpr_accept" value="1" required="required" />
+                    <?php echo $agree_text;?>
+                </label>
+            </div>
+            <?php endif; ?>
+
             <button type="submit" name="simple_newsletter_submit">Subscribe</button>
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_end' ); ?>
         </form>
