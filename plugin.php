@@ -54,6 +54,8 @@ class Djebel_Simple_Newsletter_Plugin
         $email = $req_obj->get('simple_newsletter_email');
         $email_enc = $req_obj->encode($email);
 
+        $auto_focus = empty($params['focus']) ? 0 : 1;
+
         if ($req_obj->isPost('simple_newsletter_email')) {
             try {
                 if (empty($email)) {
@@ -101,6 +103,7 @@ class Djebel_Simple_Newsletter_Plugin
         <form id="djebel-simple-newsletter-form" class="djebel-simple-newsletter-form" method="post" action="">
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_start' ); ?>
             <input type="email" id="email" name="simple_newsletter_email" value="<?php echo $email_enc; ?>"
+                   <?php echo $auto_focus ? 'autofocus="autofocus"' : ''; ?>
                    placeholder="Enter your email" required="required" />
             <button type="submit" name="simple_newsletter_submit">Subscribe</button>
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_end' ); ?>
