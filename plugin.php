@@ -114,20 +114,37 @@ class Djebel_Simple_Newsletter_Plugin
 
         <form id="djebel-simple-newsletter-form" class="djebel-simple-newsletter-form" method="post" action="">
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_start' ); ?>
-            <input type="email" id="email" name="simple_newsletter_email" value="<?php echo $email_enc; ?>"
-                   <?php echo $auto_focus ? 'autofocus="autofocus"' : ''; ?>
-                   placeholder="Enter your email" required="required" />
-
-            <?php if ($render_agree) : ?>
-            <div>
-                <label>
-                    <input type="checkbox" name="simple_newsletter_gdpr_accept" value="1" required="required" />
-                    <?php echo $agree_text;?>
-                </label>
+            
+            <div class="newsletter-input-group">
+                <input type="email" 
+                       id="email" 
+                       name="simple_newsletter_email" 
+                       value="<?php echo $email_enc; ?>"
+                       <?php echo $auto_focus ? 'autofocus="autofocus"' : ''; ?>
+                       placeholder="Enter your email address" 
+                       required="required" 
+                       class="newsletter-email-input" />
+                
+                <button type="submit" 
+                        name="simple_newsletter_submit" 
+                        class="newsletter-submit-btn">
+                    Subscribe
+                </button>
             </div>
-            <?php endif; ?>
 
-            <button type="submit" name="simple_newsletter_submit">Subscribe</button>
+            <?php if ($render_agree) { ?>
+                <div class="newsletter-agree-section">
+                    <label class="newsletter-checkbox-label">
+                        <input type="checkbox" 
+                               name="simple_newsletter_gdpr_accept" 
+                               value="1" 
+                               required="required" 
+                               class="newsletter-checkbox" />
+                        <span class="newsletter-agree-text"><?php echo $agree_text; ?></span>
+                    </label>
+                </div>
+            <?php } ?>
+            
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_end' ); ?>
         </form>
         <?php
