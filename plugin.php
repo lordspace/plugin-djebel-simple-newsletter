@@ -164,13 +164,13 @@ class Djebel_Simple_Newsletter_Plugin
             <h3 class="djebel-simple-newsletter-title"><?php echo Djebel_App_HTML::encodeEntities($title); ?></h3>
         <?php } ?>
         
-        <?php if (!empty($cta_text)) { ?>
-            <div class="djebel-simple-newsletter-cta"><?php echo Djebel_App_HTML::encodeEntities($cta_text); ?></div>
-        <?php } ?>
-        
         <div class="djebel-simple-newsletter-msg"><?php echo $msg; ?></div>
 
         <form id="djebel-simple-newsletter-form" class="djebel-simple-newsletter-form" method="post" action="">
+            <?php if (!empty($cta_text)) { ?>
+                <div class="djebel-simple-newsletter-cta"><?php echo Djebel_App_HTML::encodeEntities($cta_text); ?></div>
+            <?php } ?>
+            
             <?php Dj_App_Hooks::doAction( 'app.plugin.simple_newsletter.form_start' ); ?>
             
             <input type="hidden"
