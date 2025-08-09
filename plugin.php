@@ -45,9 +45,9 @@ class Djebel_Simple_Newsletter_Plugin
         $this->setFile($file);
 
         $shortcode_obj = Dj_App_Shortcode::getInstance();
-        $shortcode_obj->addShortcode('djebel-simple-newsletter', [ $this, 'renderNewsletterForm', ] );
+        $shortcode_obj->addShortcode('djebel-simple-newsletter', [ $this, 'renderNewsletterForm' ] );
 
-//        Dj_App_Hooks::addAction( 'app.page.body.start', [ $obj, 'renderNewsletterForm', ] );
+//        Dj_App_Hooks::addAction( 'app.page.body.start', [ $obj, 'renderNewsletterForm' ] );
     }
 
     /**
