@@ -2,10 +2,10 @@
 /*
 plugin_name: Djebel Simple Newsletter
 plugin_uri: https://djebel.com/plugins/djebel-simple-newsletter
-description: allows content creators to create social links to their social profiles.
+description: Simple newsletter subscription form with honeypot spam protection. Supports title, CTA content, and GDPR compliance.
 version: 1.0.0
 load_priority:20
-tags: newseltter, email, marketing
+tags: newsletter, email, marketing, subscription
 stable_version: 1.0.0
 min_php_ver: 5.6
 min_dj_app_ver: 1.0.0
@@ -13,7 +13,7 @@ tested_with_dj_app_ver: 1.0.0
 author_name: Svetoslav Marinov (Slavi)
 company_name: Orbisius
 author_uri: https://orbisius.com
-text_domain: hello-world
+text_domain: djebel-simple-newsletter
 license: gpl2
 */
 
@@ -63,6 +63,7 @@ class Djebel_Simple_Newsletter_Plugin
         $email_enc = $req_obj->encode($email);
 
         $title = empty($params['title']) ? '' : trim($params['title']);
+        $cta_text = empty($params['cta_text']) ? '' : trim($params['cta_text']);
         $render_agree = empty($params['render_agree']) ? 0 : 1;
         $auto_focus = empty($params['auto_focus']) ? 0 : 1;
 
@@ -161,6 +162,10 @@ class Djebel_Simple_Newsletter_Plugin
         
         <?php if (!empty($title)) { ?>
             <h3 class="djebel-simple-newsletter-title"><?php echo Djebel_App_HTML::encodeEntities($title); ?></h3>
+        <?php } ?>
+        
+        <?php if (!empty($cta_text)) { ?>
+            <div class="djebel-simple-newsletter-cta"><?php echo Djebel_App_HTML::encodeEntities($cta_text); ?></div>
         <?php } ?>
         
         <div class="djebel-simple-newsletter-msg"><?php echo $msg; ?></div>

@@ -32,13 +32,15 @@ A lightweight and modern newsletter subscription plugin for Djebel applications.
 ### Advanced Shortcode with Parameters
 
 ```
-[djebel-simple-newsletter render_agree="1" auto_focus="1" agree_text="I agree to receive updates"]
+[djebel-simple-newsletter title="Join Our Newsletter" cta_text="Get exclusive updates and early access to new features!" render_agree="1" auto_focus="1" agree_text="I agree to receive updates"]
 ```
 
 ## Shortcode Parameters
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
+| `title` | string | `""` | Optional title/heading displayed above form |
+| `cta_text` | string | `""` | Call-to-action text displayed before form |
 | `render_agree` | boolean | `0` | Show GDPR consent checkbox |
 | `auto_focus` | boolean | `0` | Auto-focus the email input field |
 | `agree_text` | string | `"I agree to be notified"` | Custom text for consent checkbox |
@@ -63,6 +65,16 @@ A lightweight and modern newsletter subscription plugin for Djebel applications.
 **Form with auto-focus:**
 ```
 [djebel-simple-newsletter auto_focus="1"]
+```
+
+**Form with title and CTA text:**
+```
+[djebel-simple-newsletter title="Stay Updated" cta_text="Join our mailing list for the latest news and exclusive offers!"]
+```
+
+**Complete form with all options:**
+```
+[djebel-simple-newsletter title="Newsletter Signup" cta_text="Don't miss out on important updates!" render_agree="1" auto_focus="1" agree_text="I consent to receive email updates"]
 ```
 
 ## Data Storage
@@ -90,6 +102,8 @@ jane@example.com,Mon, 15 Jan 2024 11:45:00 +0000,Mozilla/5.0...,192.168.1.2
 
 The plugin uses the following CSS classes for styling:
 
+- `.djebel-simple-newsletter-title` - Newsletter title/heading
+- `.djebel-simple-newsletter-cta` - Call-to-action text area
 - `.djebel-simple-newsletter-form` - Main form container
 - `.djebel-simple-newsletter-msg` - Message display area
 - `.newsletter-input-group` - Email input and button container
@@ -203,6 +217,12 @@ The plugin includes comprehensive error handling:
 - **File permissions:** Write access to data directory
 
 ## Changelog
+
+### Version 1.0.1
+- ✨ Added `title` parameter for optional form heading
+- ✨ Added `cta_text` parameter for call-to-action text before form
+- 📝 Updated documentation with new parameter examples
+- 🔧 Fixed plugin description and tags
 
 ### Version 1.0.0
 - Initial release
