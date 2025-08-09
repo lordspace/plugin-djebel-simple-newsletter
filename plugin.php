@@ -62,9 +62,9 @@ class Djebel_Simple_Newsletter_Plugin
         $email = $req_obj->get('simple_newsletter_email');
         $email_enc = $req_obj->encode($email);
 
+        $title = empty($params['title']) ? '' : trim($params['title']);
         $render_agree = empty($params['render_agree']) ? 0 : 1;
         $auto_focus = empty($params['auto_focus']) ? 0 : 1;
-        $title = empty($params['title']) ? '' : trim($params['title']);
 
         $agree_text = '';
 
