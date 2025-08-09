@@ -64,6 +64,7 @@ class Djebel_Simple_Newsletter_Plugin
 
         $render_agree = empty($params['render_agree']) ? 0 : 1;
         $auto_focus = empty($params['auto_focus']) ? 0 : 1;
+        $title = empty($params['title']) ? '' : trim($params['title']);
 
         $agree_text = '';
 
@@ -157,6 +158,11 @@ class Djebel_Simple_Newsletter_Plugin
             color: transparent;
         }
         </style>
+        
+        <?php if (!empty($title)) { ?>
+            <h3 class="djebel-simple-newsletter-title"><?php echo Djebel_App_HTML::encodeEntities($title); ?></h3>
+        <?php } ?>
+        
         <div class="djebel-simple-newsletter-msg"><?php echo $msg; ?></div>
 
         <form id="djebel-simple-newsletter-form" class="djebel-simple-newsletter-form" method="post" action="">
