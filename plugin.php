@@ -33,7 +33,7 @@ class Djebel_Simple_Newsletter_Plugin
     private $file = '';
     public function __construct()
     {
-        $file = Dj_App_Util::getDataDir() . '/plugins/djebel-simple-newsletter/{YYYY}/{MM}/data_{YYYY}-{MM}-{DD}.csv';
+        $file = Dj_App_Util::getCorePrivateDir() . '/plugins/djebel-simple-newsletter/{YYYY}/{MM}/data_{YYYY}-{MM}-{DD}.csv';
 
         $replace_str = [
             '{YYYY}' => date('Y'),
