@@ -65,7 +65,7 @@ class Djebel_Simple_Newsletter_Plugin
         $title = empty($params['title']) ? '' : trim($params['title']);
         $cta_text = empty($params['cta_text']) ? '' : trim($params['cta_text']);
         $render_agree = empty($params['render_agree']) ? 0 : 1;
-        $auto_focus = empty($params['auto_focus']) ? 0 : 1;
+        $auto_focus = !empty($params['auto_focus']) ? 1 : 0;
 
         $agree_text = '';
 
