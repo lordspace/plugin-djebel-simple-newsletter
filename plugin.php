@@ -246,7 +246,7 @@ class Djebel_Simple_Newsletter_Plugin
         $fp = null;
 
         try {
-            Dj_App_Util::time( __METHOD__ );
+            Dj_App_Util::microtime( __METHOD__ );
             $dir = dirname($file);
 
             $res = Dj_App_File_Util::mkdir($dir);
@@ -292,7 +292,7 @@ class Djebel_Simple_Newsletter_Plugin
                 fclose($fp);
             }
 
-            $res_obj->exec_time = Dj_App_Util::time( __METHOD__ );
+            $res_obj->exec_time = Dj_App_Util::microtime( __METHOD__ );
         }
 
         return $res_obj;
