@@ -21,14 +21,14 @@ license: gpl2
 /**
  * Custom exception for honeypot detection - silently handled
  */
-class Djebel_Simple_Newsletter_Honeypot_Exception extends Exception
+class Djebel_Plugin_Simple_Newsletter_Honeypot_Exception extends \Exception
 {
     // This exception is intentionally silent - no message needed
 }
 
-$obj = new Djebel_Simple_Newsletter_Plugin();
+$obj = new Djebel_Plugin_Simple_Newsletter();
 
-class Djebel_Simple_Newsletter_Plugin
+class Djebel_Plugin_Simple_Newsletter
 {
     private $file = '';
     public function __construct()
@@ -53,7 +53,7 @@ class Djebel_Simple_Newsletter_Plugin
     /**
      * @todo send a code that once entered will confirm the subscription
      * @return void
-     * @throws Exception
+     * @throws Dj_App_Exception|Djebel_Plugin_Simple_Newsletter_Honeypot_Exception
      */
     public function renderNewsletterForm($params = [])
     {
@@ -82,7 +82,7 @@ class Djebel_Simple_Newsletter_Plugin
                 
                 // If either honeypot field is filled, it's spam - throw ignorable exception
                 if (!empty($honeypot_website) || !empty($honeypot_phone)) {
-                    throw new Djebel_Simple_Newsletter_Honeypot_Exception();
+                    throw new Djebel_Plugin_Simple_Newsletter_Honeypot_Exception();
                 }
 
                 // Normal validation for legitimate submissions
@@ -125,7 +125,7 @@ class Djebel_Simple_Newsletter_Plugin
                 $email_enc = ''; // no need to show it again
                 $msg = 'Done';
                 $msg = Dj_App_Util::msg($msg, Dj_App_Util::MSG_SUCCESS);
-            } catch (Djebel_Simple_Newsletter_Honeypot_Exception $e) {
+            } catch (Djebel_Plugin_Simple_Newsletter_Honeypot_Exception $e) {
                 // Honeypot detected - return fake success without saving data
                 $email_enc = '';
                 $msg = 'Done';
